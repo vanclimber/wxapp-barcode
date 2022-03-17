@@ -1,0 +1,13 @@
+<!--index.wxml-->
+<view class="container page">
+  <component/>
+  <view class="panel">
+    <view class="header">
+    </view>
+    <view class="barcode">
+      <view class="barnum">{{code}}</view>
+      <canvas type="2d" id="barcode2" />
+    </view>
+  </view>
+</view>
+

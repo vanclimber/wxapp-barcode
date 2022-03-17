@@ -1,0 +1,9 @@
+.page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    height:300rpx;
+    border-radius: 10rpx;
+}
