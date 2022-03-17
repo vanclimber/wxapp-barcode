@@ -4,7 +4,7 @@
   "description": "微信小程序生成code128类型的条形码",
   "main": "dist/bundle.js",
   "scripts": {
-    "build": "npx babel"
+    "build": "rollup --config"
   },
   "author": "vanclimber",
   "license": "MIT",
@@ -14,5 +14,17 @@
     "@rollup/plugin-babel": "^5.3.1",
     "rollup-plugin-uglify": "^6.0.4"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "directories": {
+    "example": "example"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vanclimber/wxapp-barcode.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/vanclimber/wxapp-barcode/issues"
+  },
+  "homepage": "https://github.com/vanclimber/wxapp-barcode#readme"
 }

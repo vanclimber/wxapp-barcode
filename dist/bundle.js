@@ -1,1 +1,414 @@
-import"core-js/modules/es.regexp.exec.js";import"core-js/modules/es.parse-int.js";import"core-js/modules/es.string.match.js";import"core-js/modules/es.regexp.constructor.js";import"core-js/modules/es.regexp.to-string.js";import"core-js/modules/es.string.split.js";function ownKeys(e,t){var r,o=Object.keys(e);return Object.getOwnPropertySymbols&&(r=Object.getOwnPropertySymbols(e),t&&(r=r.filter(function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable})),o.push.apply(o,r)),o}function _objectSpread2(e){for(var t=1;t<arguments.length;t++){var r=null!=arguments[t]?arguments[t]:{};t%2?ownKeys(Object(r),!0).forEach(function(t){_defineProperty(e,t,r[t])}):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(r)):ownKeys(Object(r)).forEach(function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(r,t))})}return e}function _defineProperty(t,e,r){return e in t?Object.defineProperty(t,e,{value:r,enumerable:!0,configurable:!0,writable:!0}):t[e]=r,t}const SET_A=0,SET_B=1,SET_C=2,SHIFT=98,START_A=103,START_B=104,START_C=105,MODULO=103,STOP=106,SET_BY_CODE={[START_A]:SET_A,[START_B]:SET_B,[START_C]:SET_C},SWAP={101:SET_A,100:SET_B,99:SET_C},A_START_CHAR=String.fromCharCode(208),B_START_CHAR=String.fromCharCode(209),C_START_CHAR=String.fromCharCode(210),A_CHARS="[\0-_È-Ï]",B_CHARS="[ -È-Ï]",C_CHARS="(Ï*[0-9]{2}Ï*)",PATTERNS=[[2,1,2,2,2,2,0,0],[2,2,2,1,2,2,0,0],[2,2,2,2,2,1,0,0],[1,2,1,2,2,3,0,0],[1,2,1,3,2,2,0,0],[1,3,1,2,2,2,0,0],[1,2,2,2,1,3,0,0],[1,2,2,3,1,2,0,0],[1,3,2,2,1,2,0,0],[2,2,1,2,1,3,0,0],[2,2,1,3,1,2,0,0],[2,3,1,2,1,2,0,0],[1,1,2,2,3,2,0,0],[1,2,2,1,3,2,0,0],[1,2,2,2,3,1,0,0],[1,1,3,2,2,2,0,0],[1,2,3,1,2,2,0,0],[1,2,3,2,2,1,0,0],[2,2,3,2,1,1,0,0],[2,2,1,1,3,2,0,0],[2,2,1,2,3,1,0,0],[2,1,3,2,1,2,0,0],[2,2,3,1,1,2,0,0],[3,1,2,1,3,1,0,0],[3,1,1,2,2,2,0,0],[3,2,1,1,2,2,0,0],[3,2,1,2,2,1,0,0],[3,1,2,2,1,2,0,0],[3,2,2,1,1,2,0,0],[3,2,2,2,1,1,0,0],[2,1,2,1,2,3,0,0],[2,1,2,3,2,1,0,0],[2,3,2,1,2,1,0,0],[1,1,1,3,2,3,0,0],[1,3,1,1,2,3,0,0],[1,3,1,3,2,1,0,0],[1,1,2,3,1,3,0,0],[1,3,2,1,1,3,0,0],[1,3,2,3,1,1,0,0],[2,1,1,3,1,3,0,0],[2,3,1,1,1,3,0,0],[2,3,1,3,1,1,0,0],[1,1,2,1,3,3,0,0],[1,1,2,3,3,1,0,0],[1,3,2,1,3,1,0,0],[1,1,3,1,2,3,0,0],[1,1,3,3,2,1,0,0],[1,3,3,1,2,1,0,0],[3,1,3,1,2,1,0,0],[2,1,1,3,3,1,0,0],[2,3,1,1,3,1,0,0],[2,1,3,1,1,3,0,0],[2,1,3,3,1,1,0,0],[2,1,3,1,3,1,0,0],[3,1,1,1,2,3,0,0],[3,1,1,3,2,1,0,0],[3,3,1,1,2,1,0,0],[3,1,2,1,1,3,0,0],[3,1,2,3,1,1,0,0],[3,3,2,1,1,1,0,0],[3,1,4,1,1,1,0,0],[2,2,1,4,1,1,0,0],[4,3,1,1,1,1,0,0],[1,1,1,2,2,4,0,0],[1,1,1,4,2,2,0,0],[1,2,1,1,2,4,0,0],[1,2,1,4,2,1,0,0],[1,4,1,1,2,2,0,0],[1,4,1,2,2,1,0,0],[1,1,2,2,1,4,0,0],[1,1,2,4,1,2,0,0],[1,2,2,1,1,4,0,0],[1,2,2,4,1,1,0,0],[1,4,2,1,1,2,0,0],[1,4,2,2,1,1,0,0],[2,4,1,2,1,1,0,0],[2,2,1,1,1,4,0,0],[4,1,3,1,1,1,0,0],[2,4,1,1,1,2,0,0],[1,3,4,1,1,1,0,0],[1,1,1,2,4,2,0,0],[1,2,1,1,4,2,0,0],[1,2,1,2,4,1,0,0],[1,1,4,2,1,2,0,0],[1,2,4,1,1,2,0,0],[1,2,4,2,1,1,0,0],[4,1,1,2,1,2,0,0],[4,2,1,1,1,2,0,0],[4,2,1,2,1,1,0,0],[2,1,2,1,4,1,0,0],[2,1,4,1,2,1,0,0],[4,1,2,1,2,1,0,0],[1,1,1,1,4,3,0,0],[1,1,1,3,4,1,0,0],[1,3,1,1,4,1,0,0],[1,1,4,1,1,3,0,0],[1,1,4,3,1,1,0,0],[4,1,1,1,1,3,0,0],[4,1,1,3,1,1,0,0],[1,1,3,1,4,1,0,0],[1,1,4,1,3,1,0,0],[3,1,1,1,4,1,0,0],[4,1,1,1,3,1,0,0],[2,1,1,4,1,2,0,0],[2,1,1,2,1,4,0,0],[2,1,1,2,3,2,0,0],[2,3,3,1,1,1,2,0]];class Graphics{constructor(t,e){var{marginBetween:e=10,width:r=2,height:o=100}=e;this.width=r,this.height=o,this.quiet=e,this.area={top:0,left:this.quiet},this.ctx=t}_fillRect(t,e,r,o){this.ctx.fillRect(t,e,r,o)}autoFill(e){const{width:r,height:o,ctx:n}=this;let c=this.area.left;var i=this.area.top;for(let t=0;t<e.length;t++)for(var s=e[t],a=0;a<8;a+=2){var h=PATTERNS[s][a]*r,l=PATTERNS[s][a+1]*r;0<h&&n.fillRect(c,i,h,o),c+=h+l}}}const code128=function(t,e,r){e=encode(e);new Graphics(t,r).autoFill(e)},matchSetALength=t=>t.match(new RegExp("^".concat(A_CHARS,"*")))[0].length,matchSetBLength=t=>t.match(new RegExp("^".concat(B_CHARS,"*")))[0].length,matchSetC=t=>t.match(new RegExp("^".concat(C_CHARS,"*")))[0];function autoSelectFromAB(t,e){var r=e?A_CHARS:B_CHARS,o=t.match(new RegExp("^(".concat(r,"+?)(([0-9]{2}){2,})([^0-9]|$)")));if(o)return o[1]+String.fromCharCode(204)+autoSelectFromC(t.substring(o[1].length));o=t.match(new RegExp("^".concat(r,"+")))[0];return o.length===t.length?t:o+String.fromCharCode(e?205:206)+autoSelectFromAB(t.substring(o.length),!e)}function autoSelectFromC(t){var e=matchSetC(t),r=e.length;if(r===t.length)return t;t=t.substring(r);r=matchSetALength(t)>=matchSetBLength(t);return e+String.fromCharCode(r?206:205)+autoSelectFromAB(t,r)}function auto(t){let e;var r=matchSetC(t).length;return e=2<=r?C_START_CHAR+autoSelectFromC(t):((r=matchSetALength(t)>matchSetBLength(t))?A_START_CHAR:B_START_CHAR)+autoSelectFromAB(t,r)}function encode(t,e){let r="",o=[];r=auto(t);var n,t=(o=r.split("").map(t=>t.charCodeAt(0))).shift()-105,c=SET_BY_CODE[t];if(void 0===c)throw new RangeError("The encoding does not start with a start character.");let i=[],s=0,a=1,h=c;for(;0<o.length;){let t;200<=o[0]?(t=o.shift()-105,void 0!==(n=SWAP[t])?h=n:h!==SET_A&&h!==SET_B||t!==SHIFT||(o[0]=h===SET_A?95<o[0]?o[0]-96:o[0]:o[0]<32?o[0]+96:o[0])):t=correctIndex(o,h),i.push(t),s+=t*a,a++}return i.unshift(t),i=i.concat([(s+t)%MODULO,STOP])}function correctIndex(t,e){var r;return e===SET_A?(r=t.shift())<32?r+64:r-32:e===SET_B?t.shift()-32:10*(t.shift()-48)+t.shift()-48}class BarCode{constructor(t){var e=1<arguments.length&&void 0!==arguments[1]?arguments[1]:"",r=2<arguments.length&&void 0!==arguments[2]?arguments[2]:{},o=3<arguments.length&&void 0!==arguments[3]?arguments[3]:null;this.selector=t,this.text=e,this.options=r,this.component=o}options(t){return this.options=_objectSpread2(_objectSpread2({},this.options),t),this}getCTX(r){var t;const{component:e,selector:o}=this,n=(null==e||null==(t=e.createSelectorQuery)?void 0:t.call(e))||wx.createSelectorQuery();console.log(n),n.select(o).fields({node:!0}).exec(t=>{const e=null==(t=t[0])?void 0:t.node;e?(t=e.getContext("2d"),console.log(t),r(t)):console.warn("[wxapp-barcode]: have not found this node by this selector: ".concat(o))})}render(){const{text:e,options:r}=this,{lineColor:o="#000000"}=r;this.getCTX(t=>{t.fillStyle=o,code128(t,e,r)})}}export{BarCode,BarCode as default};
+// constants for internal usage
+const SET_A = 0;
+const SET_B = 1;
+const SET_C = 2;
+
+// Special characters
+const SHIFT = 98;
+const START_A = 103;
+const START_B = 104;
+const START_C = 105;
+const MODULO = 103;
+const STOP = 106;
+
+// Get set by start code
+const SET_BY_CODE = {
+	[START_A]: SET_A,
+	[START_B]: SET_B,
+	[START_C]: SET_C,
+};
+
+// Get next set by code
+const SWAP = {
+	101: SET_A,
+	100: SET_B,
+	99: SET_C,
+};
+
+const A_START_CHAR = String.fromCharCode(208); // START_A + 105
+const B_START_CHAR = String.fromCharCode(209); // START_B + 105
+const C_START_CHAR = String.fromCharCode(210); // START_C + 105
+
+// 128A (Code Set A)
+// ASCII characters 00 to 95 (0–9, A–Z and control codes), special characters, and FNC 1–4
+const A_CHARS = "[\x00-\x5F\xC8-\xCF]";
+
+// 128B (Code Set B)
+// ASCII characters 32 to 127 (0–9, A–Z, a–z), special characters, and FNC 1–4
+const B_CHARS = "[\x20-\x7F\xC8-\xCF]";
+
+// 128C (Code Set C)
+// 00–99 (encodes two digits with a single code point) and FNC1
+const C_CHARS = "(\xCF*[0-9]{2}\xCF*)";
+
+// CODE128 includes 107 symbols:
+// 103 data symbols, 3 start symbols (A, B and C), and 1 stop symbol (the last one)
+const PATTERNS = [
+    [2, 1, 2, 2, 2, 2, 0, 0], // 0
+    [2, 2, 2, 1, 2, 2, 0, 0], // 1
+    [2, 2, 2, 2, 2, 1, 0, 0], // 2
+    [1, 2, 1, 2, 2, 3, 0, 0], // 3
+    [1, 2, 1, 3, 2, 2, 0, 0], // 4
+    [1, 3, 1, 2, 2, 2, 0, 0], // 5
+    [1, 2, 2, 2, 1, 3, 0, 0], // 6
+    [1, 2, 2, 3, 1, 2, 0, 0], // 7
+    [1, 3, 2, 2, 1, 2, 0, 0], // 8
+    [2, 2, 1, 2, 1, 3, 0, 0], // 9
+    [2, 2, 1, 3, 1, 2, 0, 0], // 10
+    [2, 3, 1, 2, 1, 2, 0, 0], // 11
+    [1, 1, 2, 2, 3, 2, 0, 0], // 12
+    [1, 2, 2, 1, 3, 2, 0, 0], // 13
+    [1, 2, 2, 2, 3, 1, 0, 0], // 14
+    [1, 1, 3, 2, 2, 2, 0, 0], // 15
+    [1, 2, 3, 1, 2, 2, 0, 0], // 16
+    [1, 2, 3, 2, 2, 1, 0, 0], // 17
+    [2, 2, 3, 2, 1, 1, 0, 0], // 18
+    [2, 2, 1, 1, 3, 2, 0, 0], // 19
+    [2, 2, 1, 2, 3, 1, 0, 0], // 20
+    [2, 1, 3, 2, 1, 2, 0, 0], // 21
+    [2, 2, 3, 1, 1, 2, 0, 0], // 22
+    [3, 1, 2, 1, 3, 1, 0, 0], // 23
+    [3, 1, 1, 2, 2, 2, 0, 0], // 24
+    [3, 2, 1, 1, 2, 2, 0, 0], // 25
+    [3, 2, 1, 2, 2, 1, 0, 0], // 26
+    [3, 1, 2, 2, 1, 2, 0, 0], // 27
+    [3, 2, 2, 1, 1, 2, 0, 0], // 28
+    [3, 2, 2, 2, 1, 1, 0, 0], // 29
+    [2, 1, 2, 1, 2, 3, 0, 0], // 30
+    [2, 1, 2, 3, 2, 1, 0, 0], // 31
+    [2, 3, 2, 1, 2, 1, 0, 0], // 32
+    [1, 1, 1, 3, 2, 3, 0, 0], // 33
+    [1, 3, 1, 1, 2, 3, 0, 0], // 34
+    [1, 3, 1, 3, 2, 1, 0, 0], // 35
+    [1, 1, 2, 3, 1, 3, 0, 0], // 36
+    [1, 3, 2, 1, 1, 3, 0, 0], // 37
+    [1, 3, 2, 3, 1, 1, 0, 0], // 38
+    [2, 1, 1, 3, 1, 3, 0, 0], // 39
+    [2, 3, 1, 1, 1, 3, 0, 0], // 40
+    [2, 3, 1, 3, 1, 1, 0, 0], // 41
+    [1, 1, 2, 1, 3, 3, 0, 0], // 42
+    [1, 1, 2, 3, 3, 1, 0, 0], // 43
+    [1, 3, 2, 1, 3, 1, 0, 0], // 44
+    [1, 1, 3, 1, 2, 3, 0, 0], // 45
+    [1, 1, 3, 3, 2, 1, 0, 0], // 46
+    [1, 3, 3, 1, 2, 1, 0, 0], // 47
+    [3, 1, 3, 1, 2, 1, 0, 0], // 48
+    [2, 1, 1, 3, 3, 1, 0, 0], // 49
+    [2, 3, 1, 1, 3, 1, 0, 0], // 50
+    [2, 1, 3, 1, 1, 3, 0, 0], // 51
+    [2, 1, 3, 3, 1, 1, 0, 0], // 52
+    [2, 1, 3, 1, 3, 1, 0, 0], // 53
+    [3, 1, 1, 1, 2, 3, 0, 0], // 54
+    [3, 1, 1, 3, 2, 1, 0, 0], // 55
+    [3, 3, 1, 1, 2, 1, 0, 0], // 56
+    [3, 1, 2, 1, 1, 3, 0, 0], // 57
+    [3, 1, 2, 3, 1, 1, 0, 0], // 58
+    [3, 3, 2, 1, 1, 1, 0, 0], // 59
+    [3, 1, 4, 1, 1, 1, 0, 0], // 60
+    [2, 2, 1, 4, 1, 1, 0, 0], // 61
+    [4, 3, 1, 1, 1, 1, 0, 0], // 62
+    [1, 1, 1, 2, 2, 4, 0, 0], // 63
+    [1, 1, 1, 4, 2, 2, 0, 0], // 64
+    [1, 2, 1, 1, 2, 4, 0, 0], // 65
+    [1, 2, 1, 4, 2, 1, 0, 0], // 66
+    [1, 4, 1, 1, 2, 2, 0, 0], // 67
+    [1, 4, 1, 2, 2, 1, 0, 0], // 68
+    [1, 1, 2, 2, 1, 4, 0, 0], // 69
+    [1, 1, 2, 4, 1, 2, 0, 0], // 70
+    [1, 2, 2, 1, 1, 4, 0, 0], // 71
+    [1, 2, 2, 4, 1, 1, 0, 0], // 72
+    [1, 4, 2, 1, 1, 2, 0, 0], // 73
+    [1, 4, 2, 2, 1, 1, 0, 0], // 74
+    [2, 4, 1, 2, 1, 1, 0, 0], // 75
+    [2, 2, 1, 1, 1, 4, 0, 0], // 76
+    [4, 1, 3, 1, 1, 1, 0, 0], // 77
+    [2, 4, 1, 1, 1, 2, 0, 0], // 78
+    [1, 3, 4, 1, 1, 1, 0, 0], // 79
+    [1, 1, 1, 2, 4, 2, 0, 0], // 80
+    [1, 2, 1, 1, 4, 2, 0, 0], // 81
+    [1, 2, 1, 2, 4, 1, 0, 0], // 82
+    [1, 1, 4, 2, 1, 2, 0, 0], // 83
+    [1, 2, 4, 1, 1, 2, 0, 0], // 84
+    [1, 2, 4, 2, 1, 1, 0, 0], // 85
+    [4, 1, 1, 2, 1, 2, 0, 0], // 86
+    [4, 2, 1, 1, 1, 2, 0, 0], // 87
+    [4, 2, 1, 2, 1, 1, 0, 0], // 88
+    [2, 1, 2, 1, 4, 1, 0, 0], // 89
+    [2, 1, 4, 1, 2, 1, 0, 0], // 90
+    [4, 1, 2, 1, 2, 1, 0, 0], // 91
+    [1, 1, 1, 1, 4, 3, 0, 0], // 92
+    [1, 1, 1, 3, 4, 1, 0, 0], // 93
+    [1, 3, 1, 1, 4, 1, 0, 0], // 94
+    [1, 1, 4, 1, 1, 3, 0, 0], // 95
+    [1, 1, 4, 3, 1, 1, 0, 0], // 96
+    [4, 1, 1, 1, 1, 3, 0, 0], // 97
+    [4, 1, 1, 3, 1, 1, 0, 0], // 98
+    [1, 1, 3, 1, 4, 1, 0, 0], // 99
+    [1, 1, 4, 1, 3, 1, 0, 0], // 100
+    [3, 1, 1, 1, 4, 1, 0, 0], // 101
+    [4, 1, 1, 1, 3, 1, 0, 0], // 102
+    [2, 1, 1, 4, 1, 2, 0, 0], // 103
+    [2, 1, 1, 2, 1, 4, 0, 0], // 104
+    [2, 1, 1, 2, 3, 2, 0, 0], // 105
+    [2, 3, 3, 1, 1, 1, 2, 0], // 106
+];
+
+class Graphics {
+    constructor(ctx, options) {
+        const {
+            marginBetween = 10,
+            width = 2,
+            height = 100,
+        } = options;
+        this.width = width;
+        this.height = height;
+        this.quiet = marginBetween;
+
+        this.area = {
+            top: 0,
+            left: this.quiet,
+        };
+        this.ctx = ctx;
+    }
+
+    _fillRect (x, y, width, height) {
+        this.ctx.fillRect(x, y, width, height);
+    };
+    autoFill(codes) {
+        const { width,height,ctx } = this;
+        // var barWeight = g.area.width / ((codes.length - 3) * 11 + 35);
+
+        let x = this.area.left;
+        let y = this.area.top;
+        for (let i = 0; i < codes.length; i++) {
+            let item = codes[i];
+            //two bars at a time: 1 black and 1 white
+            for (var bar = 0; bar < 8; bar += 2) {
+                var barW = PATTERNS[item][bar] * width;
+                var spcW = PATTERNS[item][bar + 1] * width;
+    
+                //no need to draw if 0 width
+                if (barW > 0) {
+                    ctx.fillRect(x, y, barW, height);
+                }
+                x += barW + spcW;
+            }
+        }
+    }
+}
+
+const code128 = function (ctx, text, options) {
+    var codes = encode(text);
+    var g = new Graphics(ctx, options);
+    g.autoFill(codes);
+};
+
+// Match Set functions
+const matchSetALength = (string) =>
+    string.match(new RegExp(`^${A_CHARS}*`))[0].length;
+const matchSetBLength = (string) =>
+    string.match(new RegExp(`^${B_CHARS}*`))[0].length;
+const matchSetC = (string) => string.match(new RegExp(`^${C_CHARS}*`))[0];
+
+// CODE128A or CODE128B
+function autoSelectFromAB(string, isA) {
+    const ranges = isA ? A_CHARS : B_CHARS;
+    const untilC = string.match(
+        new RegExp(`^(${ranges}+?)(([0-9]{2}){2,})([^0-9]|$)`)
+    );
+
+    if (untilC) {
+        return (
+            untilC[1] +
+            String.fromCharCode(204) +
+            autoSelectFromC(string.substring(untilC[1].length))
+        );
+    }
+
+    const chars = string.match(new RegExp(`^${ranges}+`))[0];
+
+    if (chars.length === string.length) {
+        return string;
+    }
+
+    return (
+        chars +
+        String.fromCharCode(isA ? 205 : 206) +
+        autoSelectFromAB(string.substring(chars.length), !isA)
+    );
+}
+
+// CODE128C
+function autoSelectFromC(string) {
+    const cMatch = matchSetC(string);
+    const length = cMatch.length;
+
+    if (length === string.length) {
+        return string;
+    }
+
+    string = string.substring(length);
+
+    // Select A/B depending on the longest match
+    const isA = matchSetALength(string) >= matchSetBLength(string);
+    return (
+        cMatch +
+        String.fromCharCode(isA ? 206 : 205) +
+        autoSelectFromAB(string, isA)
+    );
+}
+
+// Detect Code Set (A, B or C) and format the string
+function auto(string) {
+    let newString;
+    const cLength = matchSetC(string).length;
+
+    // Select 128C if the string start with enough digits
+    if (cLength >= 2) {
+        newString = C_START_CHAR + autoSelectFromC(string);
+    } else {
+        // Select A/B depending on the longest match
+        const isA = matchSetALength(string) > matchSetBLength(string);
+        newString =
+            (isA ? A_START_CHAR : B_START_CHAR) + autoSelectFromAB(string, isA);
+    }
+
+    // return newString.replace(
+    // 	/[\xCD\xCE]([^])[\xCD\xCE]/, // Any sequence between 205 and 206 characters
+    // 	(match, char) => String.fromCharCode(203) + char
+    // );
+    return newString;
+}
+
+function encode(text, options) {
+    // const { format = "CODE128", ena128 = false } = options;
+    const format = "CODE128";
+    let newText = "";
+    let bytes = [];
+    switch (format) {
+        case "CODE128A":
+            break;
+        default:
+            newText = auto(text);
+            break;
+    }
+    bytes = newText.split("").map((char) => char.charCodeAt(0));
+
+    // Remove the start code from the bytes and set its index
+    const startIndex = bytes.shift() - 105;
+    // Get start set by index
+    const startSet = SET_BY_CODE[startIndex];
+
+    if (startSet === undefined) {
+        throw new RangeError(
+            "The encoding does not start with a start character."
+        );
+    }
+
+    let result = [],
+        checksum = 0,
+        pos = 1,
+        set = startSet;
+
+    while (bytes.length > 0) {
+        let index;
+        // Special characters
+        if (bytes[0] >= 200) {
+            index = bytes.shift() - 105;
+            const nextSet = SWAP[index];
+            // Swap to other set
+            if (nextSet !== undefined) {
+                set = nextSet;
+            }
+            // Continue on current set but encode a special character
+            else {
+                // Shift 
+                if ((set === SET_A || set === SET_B) && index === SHIFT) {
+                    // Convert the next character so that is encoded correctly
+                    bytes[0] =
+                        set === SET_A
+                            ? bytes[0] > 95
+                                ? bytes[0] - 96
+                                : bytes[0] // bytes[0] is type B
+                            : bytes[0] < 32
+                            ? bytes[0] + 96
+                            : bytes[0];
+                }
+            }
+        }
+        // Continue encoding
+        else {
+            index = correctIndex(bytes, set);
+        }
+        result.push(index);
+        checksum += index * pos;
+        pos++;
+    }
+
+    result.unshift(startIndex);
+    result = result.concat([(checksum + startIndex) % MODULO, STOP]);
+    return result;
+}
+
+// Correct an index by a set and shift it from the bytes array
+function correctIndex(bytes, set) {
+    if (set === SET_A) {
+        const charCode = bytes.shift();
+        return charCode < 32 ? charCode + 64 : charCode - 32;
+    } else if (set === SET_B) {
+        return bytes.shift() - 32;
+    } else {
+        return (bytes.shift() - 48) * 10 + bytes.shift() - 48;
+    }
+}
+
+class BarCode {
+    constructor(selector, text = "", options = {},component = null) {
+        this.selector = selector;
+        this.text = text;
+        this.options = options;
+        this.component = component;
+    }
+
+    options(options) {
+        this.options = {
+            ...this.options,
+            ...options,
+        };
+        return this;
+    }
+
+    getCTX(callback) {
+        const { component, selector } = this;
+        // 自定义组件中获取canvas的ctx需要调用this.createSelectorQuery
+        const query = component?.createSelectorQuery?.() || wx.createSelectorQuery();
+        console.log(query);
+        query
+            .select(selector)
+            .fields({ node: true })
+            .exec((res) => {
+                const canvas = res[0]?.node;
+                if (canvas) {
+                    const ctx = canvas.getContext("2d");
+                    console.log(ctx);
+                    callback(ctx);
+                } else {
+                    console.warn(`[wxapp-barcode]: have not found this node by this selector: ${selector}`);
+                }
+            });
+    }
+    
+    render() {
+        const { text, options } = this;
+        const {
+            lineColor = "#000000",
+            backgroundColor = "#FFFFFF",
+        } = options;
+        this.getCTX((ctx) => {
+            ctx.fillStyle = lineColor;
+            code128(ctx, text, options);
+        });
+    }
+}
+
+export { BarCode, BarCode as default };
