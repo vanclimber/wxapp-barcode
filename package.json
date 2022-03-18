@@ -1,6 +1,6 @@
 {
   "name": "wxapp-barcode",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "微信小程序生成code128类型的条形码",
   "main": "dist/bundle.js",
   "scripts": {
