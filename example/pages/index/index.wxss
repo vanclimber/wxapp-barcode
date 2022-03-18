@@ -34,10 +34,11 @@ page {
 
 .barcode {
     display: flex;
-    height: 320rpx;
+    min-height: 300rpx;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding-bottom: 20rpx;
 }
 
 .barnum {
@@ -51,8 +52,5 @@ page {
     white-space: nowrap;
 }
 
-.barcode > canvas {
-    width: 100%;
-    overflow: scroll; 
-}
+
 

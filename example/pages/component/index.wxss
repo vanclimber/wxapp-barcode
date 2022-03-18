@@ -4,6 +4,6 @@
     align-items: center;
     justify-content: center;
     background-color: #ffffff;
-    height:300rpx;
+    height:500rpx;
     border-radius: 10rpx;
 }

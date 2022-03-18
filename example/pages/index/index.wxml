@@ -6,7 +6,7 @@
     </view>
     <view class="barcode">
       <view class="barnum">{{code}}</view>
-      <canvas type="2d" id="barcode2" />
+      <canvas id="barcode2" type="2d" />
     </view>
   </view>
 </view>

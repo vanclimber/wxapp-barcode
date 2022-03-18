@@ -1,5 +1,9 @@
 <view class="page">
   {{text}}
-  <canvas id="barcode" type="2d" />
+  <canvas
+    id="barcode"
+    type="2d"
+    style="width: 200px; height: 100px;"
+  />
 </view>
 

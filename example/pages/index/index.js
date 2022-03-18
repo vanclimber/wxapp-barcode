@@ -7,7 +7,8 @@ Page({
     },
     onShow: function () {
         const canva = new BarCode('#barcode2', this.data.code, {
-            marginBetween: 10,
+            autoFill:true,
+            lineColor: 'blue'
         });
         canva.render();
         

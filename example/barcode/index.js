@@ -4,11 +4,16 @@ export class BarCode {
     constructor(selector, text = "", options = {},component = null) {
         this.selector = selector;
         this.text = text;
-        this.options = options;
+        const { width = 300,height = 150 } = options;
+        this.options = {
+            ...options,
+            width,
+            height
+        };
         this.component = component;
     }
 
-    options(options) {
+    setOptions(options) {
         this.options = {
             ...this.options,
             ...options,
@@ -20,15 +25,16 @@ export class BarCode {
         const { component, selector } = this;
         // 自定义组件中获取canvas的ctx需要调用this.createSelectorQuery
         const query = component?.createSelectorQuery?.() || wx.createSelectorQuery();
-        console.log(query);
         query
             .select(selector)
-            .fields({ node: true })
+            .fields({ node: true,size: true })
             .exec((res) => {
-                const canvas = res[0]?.node;
-                if (canvas) {
-                    const ctx = canvas.getContext("2d");
-                    console.log(ctx);
+                const elem = res[0];
+                if (elem && elem.node) {
+                    const { width, height} = this.options;
+                    elem.node.width = width;
+                    elem.node.height = height;
+                    const ctx = elem.node.getContext("2d");
                     callback(ctx);
                 } else {
                     console.warn(`[wxapp-barcode]: have not found this node by this selector: ${selector}`);
@@ -37,16 +43,9 @@ export class BarCode {
     }
     
     render() {
-        const { text, options } = this;
-        const {
-            lineColor = "#000000",
-            backgroundColor = "#FFFFFF",
-        } = options;
         this.getCTX((ctx) => {
-            ctx.fillStyle = lineColor;
-            code128(ctx, text, options);
+            code128(ctx, this.text, this.options);
         });
     }
 }
 
-export default BarCode;
