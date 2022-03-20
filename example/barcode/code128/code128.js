@@ -17,11 +17,11 @@ import {
 } from "./constant";
 
 class Graphics {
-  constructor(ctx, options) {
+  constructor(canvas, options) {
     const {
       autoFill = false,
-      width,
-      height,
+      width = 300,
+      height = 150,
       lineWidth = 2,
       lineHeight = 100,
       paddingLeft = 10,
@@ -34,13 +34,22 @@ class Graphics {
 
     this.autoFill = autoFill;
 
+
+    const ctx = canvas.getContext('2d');
+    const dpr = wx.getSystemInfoSync().pixelRatio;
+    const currentWidth = width * dpr;
+    const currentHeight = height * dpr;
+    canvas.width = currentWidth;
+    canvas.height = currentHeight;
+
     if (autoFill) {
-      this.width = width - paddingLeft - paddingRight;
-      this.height = height - paddingTop - paddingBottom;
+      this.width = currentWidth - paddingLeft - paddingRight;
+      this.height = currentWidth - paddingTop - paddingBottom;
     } else {
       this.lineWidth = lineWidth;
       this.lineHeight = lineHeight;
     }
+
     this.area = {
       top: paddingTop,
       left: paddingLeft,
@@ -81,9 +90,9 @@ class Graphics {
   }
 }
 
-export const code128 = function (ctx, text, options) {
+export const code128 = function (node, text, options) {
   const codes = encode(text);
-  const g = new Graphics(ctx, options);
+  const g = new Graphics(node, options);
   g.draw(codes);
 };
 

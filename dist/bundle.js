@@ -160,11 +160,11 @@
     ];
 
     class Graphics {
-      constructor(ctx, options) {
+      constructor(canvas, options) {
         const {
           autoFill = false,
-          width,
-          height,
+          width = 300,
+          height = 150,
           lineWidth = 2,
           lineHeight = 100,
           paddingLeft = 10,
@@ -177,13 +177,22 @@
 
         this.autoFill = autoFill;
 
+
+        const ctx = canvas.getContext('2d');
+        const dpr = wx.getSystemInfoSync().pixelRatio;
+        const currentWidth = width * dpr;
+        const currentHeight = height * dpr;
+        canvas.width = currentWidth;
+        canvas.height = currentHeight;
+
         if (autoFill) {
-          this.width = width - paddingLeft - paddingRight;
-          this.height = height - paddingTop - paddingBottom;
+          this.width = currentWidth - paddingLeft - paddingRight;
+          this.height = currentWidth - paddingTop - paddingBottom;
         } else {
           this.lineWidth = lineWidth;
           this.lineHeight = lineHeight;
         }
+
         this.area = {
           top: paddingTop,
           left: paddingLeft,
@@ -224,9 +233,9 @@
       }
     }
 
-    const code128 = function (ctx, text, options) {
+    const code128 = function (node, text, options) {
       const codes = encode(text);
-      const g = new Graphics(ctx, options);
+      const g = new Graphics(node, options);
       g.draw(codes);
     };
 
@@ -391,11 +400,8 @@
         constructor(selector, text = "", options = {},component = null) {
             this.selector = selector;
             this.text = text;
-            const { width = 300,height = 150 } = options;
             this.options = {
                 ...options,
-                width,
-                height
             };
             this.component = component;
         }
@@ -408,7 +414,7 @@
             return this;
         }
 
-        getCTX(callback) {
+        getNode(callback) {
             const { component, selector } = this;
             // 自定义组件中获取canvas的ctx需要调用this.createSelectorQuery
             const query = component?.createSelectorQuery?.() || wx.createSelectorQuery();
@@ -416,13 +422,8 @@
                 .select(selector)
                 .fields({ node: true,size: true })
                 .exec((res) => {
-                    const elem = res[0];
-                    if (elem && elem.node) {
-                        const { width, height} = this.options;
-                        elem.node.width = width;
-                        elem.node.height = height;
-                        const ctx = elem.node.getContext("2d");
-                        callback(ctx);
+                    if (res[0] && res[0].node) {
+                        callback(res[0].node);
                     } else {
                         console.warn(`[wxapp-barcode]: have not found this node by this selector: ${selector}`);
                     }
@@ -430,8 +431,8 @@
         }
         
         render() {
-            this.getCTX((ctx) => {
-                code128(ctx, this.text, this.options);
+            this.getNode((node) => {
+                code128(node, this.text, this.options);
             });
         }
     }

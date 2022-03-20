@@ -4,11 +4,8 @@ export class BarCode {
     constructor(selector, text = "", options = {},component = null) {
         this.selector = selector;
         this.text = text;
-        const { width = 300,height = 150 } = options;
         this.options = {
             ...options,
-            width,
-            height
         };
         this.component = component;
     }
@@ -21,7 +18,7 @@ export class BarCode {
         return this;
     }
 
-    getCTX(callback) {
+    getNode(callback) {
         const { component, selector } = this;
         // 自定义组件中获取canvas的ctx需要调用this.createSelectorQuery
         const query = component?.createSelectorQuery?.() || wx.createSelectorQuery();
@@ -29,13 +26,8 @@ export class BarCode {
             .select(selector)
             .fields({ node: true,size: true })
             .exec((res) => {
-                const elem = res[0];
-                if (elem && elem.node) {
-                    const { width, height} = this.options;
-                    elem.node.width = width;
-                    elem.node.height = height;
-                    const ctx = elem.node.getContext("2d");
-                    callback(ctx);
+                if (res[0] && res[0].node) {
+                    callback(res[0].node);
                 } else {
                     console.warn(`[wxapp-barcode]: have not found this node by this selector: ${selector}`);
                 }
@@ -43,8 +35,8 @@ export class BarCode {
     }
     
     render() {
-        this.getCTX((ctx) => {
-            code128(ctx, this.text, this.options);
+        this.getNode((node) => {
+            code128(node, this.text, this.options);
         });
     }
 }
