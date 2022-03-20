@@ -15,7 +15,7 @@ $ npm install wxapp-barcode
 <canvas id="barcode" type="2d" style="width: 200px; height: 100px;"/>
 ```
 
-其中，type="2d"属性是必要且唯一的。
+其中，id用于获取该canvas节点， type="2d"属性是必要的。宽高必须显示设置。且和options内的宽高相等
 
 在js中：
 ```javascript
