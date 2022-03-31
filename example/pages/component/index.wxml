@@ -3,7 +3,7 @@
   <canvas
     id="barcode"
     type="2d"
-    style="width: 200px; height: 100px;"
+    style="width: 500rpx; height: 200rpx;"
   />
 </view>
 

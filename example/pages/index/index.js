@@ -1,16 +1,15 @@
 //index.js
-import { BarCode } from '../../barcode/index';
+import { CODE128 } from '../../barcode/index';
 Page({
 
     data: {
-        code: '123456789012345'
+        code: '123456789012345678'
     },
     onShow: function () {
-        const canva = new BarCode('#barcode2', this.data.code, {
-            autoFill:true,
-            lineColor: 'blue'
-        });
-        canva.render();
+        CODE128('barcode2', this.data.code, {
+            width: 680,
+            height: 200,
+        })
         
     }
 })

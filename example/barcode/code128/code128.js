@@ -16,86 +16,6 @@ import {
   PATTERNS,
 } from "./constant";
 
-class Graphics {
-  constructor(canvas, options) {
-    const {
-      autoFill = false,
-      width = 300,
-      height = 150,
-      lineWidth = 2,
-      lineHeight = 100,
-      paddingLeft = 10,
-      paddingRight = 10,
-      paddingTop = 0,
-      paddingBottom = 0,
-      lineColor = "#000000",
-      backgroundColor = "#FFFFFF",
-    } = options;
-
-    this.autoFill = autoFill;
-
-
-    const ctx = canvas.getContext('2d');
-    const dpr = wx.getSystemInfoSync().pixelRatio;
-    const currentWidth = width * dpr;
-    const currentHeight = height * dpr;
-    canvas.width = currentWidth;
-    canvas.height = currentHeight;
-
-    if (autoFill) {
-      this.width = currentWidth - paddingLeft - paddingRight;
-      this.height = currentWidth - paddingTop - paddingBottom;
-    } else {
-      this.lineWidth = lineWidth;
-      this.lineHeight = lineHeight;
-    }
-
-    this.area = {
-      top: paddingTop,
-      left: paddingLeft,
-    };
-
-    ctx.fillStyle = lineColor;
-    this.ctx = ctx;
-  }
-
-  draw(codes) {
-    const { ctx, autoFill } = this;
-
-    let lineWidth, lineHeight;
-    if (autoFill) {
-      lineWidth = this.width / (codes.length * 11 + 2);
-      lineHeight = this.height;
-    } else {
-      lineWidth = this.lineWidth;
-      lineHeight = this.lineHeight;
-    }
-
-    let x = this.area.left;
-    let y = this.area.top;
-    for (let i = 0; i < codes.length; i++) {
-      let item = codes[i];
-      //two bars at a time: 1 black and 1 white
-      for (let bar = 0; bar < 8; bar += 2) {
-        let barW = PATTERNS[item][bar] * lineWidth;
-        let spcW = PATTERNS[item][bar + 1] * lineWidth;
-
-        //no need to draw if 0 width
-        if (barW > 0) {
-          ctx.fillRect(x, y, barW, lineHeight);
-        }
-          x += barW + spcW;
-      }
-    }
-  }
-}
-
-export const code128 = function (node, text, options) {
-  const codes = encode(text);
-  const g = new Graphics(node, options);
-  g.draw(codes);
-};
-
 // Match Set functions
 const matchSetALength = (string) =>
   string.match(new RegExp(`^${A_CHARS}*`))[0].length;
@@ -256,3 +176,85 @@ function correctIndex(bytes, set) {
     return (bytes.shift() - 48) * 10 + bytes.shift() - 48;
   }
 }
+class Graphics {
+  constructor(ctx, options) {
+    const {
+      autoFill = true,
+      width,
+      height,
+      lineWidth = 2,
+      lineHeight = 100,
+      paddingLeft = 10,
+      paddingRight = 10,
+      paddingTop = 0,
+      paddingBottom = 0,
+      lineColor = "#000000",
+      backgroundColor = "#FFFFFF",
+    } = options;
+
+    this.autoFill = autoFill;
+    if (autoFill) {
+      // const dpr = wx.getSystemInfoSync().pixelRatio;
+      const trueDpr = 750 / wx.getSystemInfoSync().windowWidth
+      const pixelWidth = Math.round(width / trueDpr);
+      const pixelHeight = Math.round(height / trueDpr);
+
+      this.width = pixelWidth - paddingLeft - paddingRight;
+      this.height = pixelHeight - paddingTop - paddingBottom;
+    } else {
+      this.lineWidth = lineWidth;
+      this.lineHeight = lineHeight;
+    }
+
+    this.area = {
+      top: paddingTop,
+      left: paddingLeft,
+    };
+
+    ctx.fillStyle = lineColor;
+    this.ctx = ctx;
+  }
+
+  draw(codes) {
+    const { ctx, autoFill } = this;
+
+    let lineWidth, lineHeight;
+    if (autoFill) {
+      lineWidth = this.width / (codes.length * 11 + 2);
+      lineHeight = this.height;
+    } else {
+      lineWidth = this.lineWidth;
+      lineHeight = this.lineHeight;
+    }
+
+    let x = this.area.left;
+    let y = this.area.top;
+
+    for (let i = 0; i < codes.length; i++) {
+      let item = codes[i];
+      //two bars at a time: 1 black and 1 white
+      for (let bar = 0; bar < 8; bar += 2) {
+        let barW = PATTERNS[item][bar] * lineWidth;
+        let spcW = PATTERNS[item][bar + 1] * lineWidth;
+
+        //no need to draw if 0 width
+        if (barW > 0) {
+          ctx.fillRect(x, y, barW, lineHeight);
+        }
+        x += barW + spcW;
+      }
+    }
+    // 新的canvas接口没有draw函数
+    ctx.draw?.();
+  }
+}
+
+export const code128 = function (ctx, text, options) {
+  const codes = encode(text);
+  const g = new Graphics(ctx, options);
+  g.draw(codes);
+};
+
+export default code128
+
+
