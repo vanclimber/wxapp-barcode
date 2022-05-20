@@ -2,6 +2,12 @@ import code128 from "./code128/code128";
 
 export function CODE128(selector, text = "", options = {}, component) {
   const { canvasType } = options;
+  if (text.length <= 0) {
+    console.warn(
+      "[wxapp-barcode]: text should not empty or nullish"
+    );
+    return;
+  }
 
   if (canvasType === "2d") {
     const query =
