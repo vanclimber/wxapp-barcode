@@ -10,5 +10,5 @@ export default {
       format: 'umd',  // 必须
       name: 'default'
   },
-    plugins: [babel()]
+    plugins: [babel(),uglify()]
   };
